@@ -1,0 +1,23 @@
+.gitignore
+  a02a9583bc116de0 1-29
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.8",
+  "base_commit_sha": "88e34664c0eb94fb43cb0e7be91f5e9f1605c041",
+  "prompts": {
+    "a02a9583bc116de0": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "423058",
+        "model": "AUTO"
+      },
+      "human_author": "Shyam Gupta",
+      "messages": [],
+      "total_additions": 29,
+      "total_deletions": 0,
+      "accepted_lines": 29,
+      "overriden_lines": 0
+    }
+  }
+}
