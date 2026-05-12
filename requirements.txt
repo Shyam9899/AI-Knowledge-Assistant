@@ -1,0 +1,8 @@
+fastapi ##  FastAPI is the backend web framework responsible for API routing, request validation, serialization, and asynchronous request handling in the AI system.
+uvicorn[standard]  ##   Uvicorn is the ASGI server responsible for running and serving the FastAPI application.
+python-dotenv  ##   python-dotenv loads environment variables from a .env file to support secure and environment-specific configuration management.
+openai  ##   The OpenAI SDK is used to interact with hosted LLM and embedding APIs for generation and semantic vector creation.
+chromadb  ##  ChromaDB is the vector database responsible for storing embeddings and performing semantic similarity search for retrieval in the RAG pipeline.
+pypdf  ##  PyPDF is used for extracting textual content from uploaded PDF documents before chunking and embedding generation.
+tiktoken  ##  tiktoken is used for tokenization and token counting to manage LLM context limits, chunk sizing, and API cost optimization.
+python-multipart  ##  python-multipart enables FastAPI to parse multipart/form-data requests required for file uploads.

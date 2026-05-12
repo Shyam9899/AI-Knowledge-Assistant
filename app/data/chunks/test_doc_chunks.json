@@ -1,0 +1,8 @@
+[
+  {
+    "chunk_id": "2053263e-c258-4f81-8ab5-7627c9bf8f4f",
+    "chunk_index": 0,
+    "source_file_name": "test_doc.pdf",
+    "chunk_text": "This is a test document for the AI Knowledge Assistant RAG system. The system processes PDF files by extracting text, cleaning it, and splitting it into overlapping chunks for semantic search. Each chunk is stored with metadata including a unique ID, index, and source filename. The architecture follows a Retrieval Augmented Generation pattern where documents are indexed first and queries are answered using retrieved context. The refund policy states that all purchases are eligible for a full refund within 30 days. To initiate a refund, customers must contact support with their order number. Refunds are processed within 5 to 7 business days. The return must be unopened and in original packaging. Digital products are non-refundable once downloaded."
+  }
+]
