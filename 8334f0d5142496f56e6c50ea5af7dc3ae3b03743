@@ -1,0 +1,46 @@
+app/models/schemas.py
+  a61b04439698df33 19-25,32
+  033684f31e300c2b 29,31
+app/services/llm_service.py
+  033684f31e300c2b 1-3,5,7-44,46-61,63-89
+app/routes/chat.py
+  a61b04439698df33 6,54,89-96,101
+  033684f31e300c2b 1,3-5,7-11,19-25,27-53,55-88,97-100,102
+app/services/retrieval_service.py
+  033684f31e300c2b 8,116-205
+app/utils/helpers.py
+  033684f31e300c2b 44-81
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.8",
+  "base_commit_sha": "8334f0d5142496f56e6c50ea5af7dc3ae3b03743",
+  "prompts": {
+    "033684f31e300c2b": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "423202",
+        "model": "CLAUDE_4_POINT_6_SONNET"
+      },
+      "human_author": "Shyam Gupta",
+      "messages": [],
+      "total_additions": 300,
+      "total_deletions": 16,
+      "accepted_lines": 299,
+      "overriden_lines": 0
+    },
+    "a61b04439698df33": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "423246",
+        "model": "CLAUDE_4_POINT_6_SONNET"
+      },
+      "human_author": "Shyam Gupta",
+      "messages": [],
+      "total_additions": 19,
+      "total_deletions": 1,
+      "accepted_lines": 19,
+      "overriden_lines": 0
+    }
+  }
+}
