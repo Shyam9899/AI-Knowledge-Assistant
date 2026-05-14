@@ -42,3 +42,40 @@ def clean_extracted_text(text: str) -> str:
     text = re.sub(r"\n{3,}", "\n\n", text)
 
     return text.strip()
+
+
+def build_context(retrieved_chunks: list[dict]) -> str:
+    """
+    Combine a list of retrieved chunks into a single prompt-ready context string.
+
+    Each chunk is labelled [Chunk N] for clarity. Chunks are separated by a
+    blank line to keep the context readable and avoid blending adjacent passages.
+
+    Args:
+        retrieved_chunks: List of dicts as returned by retrieve_relevant_chunks().
+                          Each dict must contain a "chunk_text" key.
+
+    Returns:
+        A formatted multi-chunk context string, or an empty string if no
+        chunks were provided.
+
+    Example output:
+        [Chunk 1]
+        All purchases are eligible for a full refund within 30 days.
+
+        [Chunk 2]
+        Refunds are processed within 5 to 7 business days.
+    """
+    if not retrieved_chunks:
+        return ""
+
+    parts = [
+        f"[Chunk {i}]\n{chunk['chunk_text'].strip()}"
+        for i, chunk in enumerate(retrieved_chunks, start=1)
+        if chunk.get("chunk_text", "").strip()
+    ]
+
+    if not parts:
+        return ""
+
+    return "\n\n".join(parts)

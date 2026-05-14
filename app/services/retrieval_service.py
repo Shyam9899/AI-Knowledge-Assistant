@@ -5,7 +5,7 @@ from typing import Optional
 import chromadb
 from chromadb.config import Settings
 
-from app.services.embedding_service import generate_embeddings
+from app.services.embedding_service import generate_embedding, generate_embeddings
 
 logger = logging.getLogger(__name__)
 
@@ -114,3 +114,92 @@ def store_chunks_in_vector_db(chunks: list[dict]) -> int:
     except Exception as exc:
         logger.error("ChromaDB upsert failed: %s", exc)
         raise
+
+
+# ---------------------------------------------------------------------------
+# Semantic Retrieval
+# ---------------------------------------------------------------------------
+
+def retrieve_relevant_chunks(query: str, top_k: int = 5) -> list[dict]:
+    """
+    Retrieve the top-k most semantically relevant chunks for a given query.
+
+    Steps:
+      1. Generate an embedding vector for the query text.
+      2. Query ChromaDB using cosine similarity.
+      3. Return chunk text and metadata in a clean structured format.
+
+    Args:
+        query:  The user's natural language question.
+        top_k:  Maximum number of chunks to retrieve (defaults to 5).
+
+    Returns:
+        A list of dicts, each containing:
+            chunk_text  — the raw chunk content
+            metadata    — source_file_name, chunk_index, chunk_id
+
+    Raises:
+        ValueError:  If the query string is empty.
+        Exception:   Propagates embedding or ChromaDB failures to the caller.
+    """
+    if not query or not query.strip():
+        raise ValueError("Query must not be empty.")
+
+    collection = _get_collection()
+
+    # Guard: ChromaDB raises an error when n_results > collection size
+    doc_count = collection.count()
+    if doc_count == 0:
+        logger.warning(
+            "ChromaDB collection '%s' is empty — no documents have been indexed yet.",
+            COLLECTION_NAME,
+        )
+        return []
+
+    n_results = min(top_k, doc_count)
+    logger.info(
+        "Retrieving top-%d chunk(s) from '%s' (collection size: %d).",
+        n_results,
+        COLLECTION_NAME,
+        doc_count,
+    )
+
+    # ------------------------------------------------------------------
+    # Embed the query and search
+    # ------------------------------------------------------------------
+    try:
+        query_embedding = generate_embedding(query)
+    except Exception as exc:
+        logger.error("Failed to generate query embedding: %s", exc)
+        raise
+
+    try:
+        results = collection.query(
+            query_embeddings=[query_embedding],
+            n_results=n_results,
+            include=["documents", "metadatas", "distances"],
+        )
+    except Exception as exc:
+        logger.error("ChromaDB query failed: %s", exc)
+        raise
+
+    # ------------------------------------------------------------------
+    # Unpack results (ChromaDB wraps every field in an outer list)
+    # ------------------------------------------------------------------
+    documents: list[str] = results.get("documents", [[]])[0]
+    metadatas: list[dict] = results.get("metadatas", [[]])[0]
+
+    chunks = [
+        {
+            "chunk_text": doc,
+            "metadata": {
+                "source_file_name": meta.get("source_file_name", ""),
+                "chunk_index": meta.get("chunk_index", -1),
+                "chunk_id": meta.get("chunk_id", ""),
+            },
+        }
+        for doc, meta in zip(documents, metadatas)
+    ]
+
+    logger.info("Retrieval complete: %d chunk(s) returned.", len(chunks))
+    return chunks

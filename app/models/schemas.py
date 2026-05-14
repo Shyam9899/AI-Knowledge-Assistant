@@ -16,10 +16,20 @@ class UploadResponse(BaseModel):
     indexed_chunks: int
 
 
+class SourceChunk(BaseModel):
+    """Metadata for a single retrieved source chunk."""
+
+    source_file_name: str
+    chunk_index: int
+
+
 class AskResponse(BaseModel):
     """Response body for the POST /ask endpoint."""
 
+    question: str
     answer: str
+    retrieved_chunks: int
+    sources: list[SourceChunk] = []
 
 
 class ChunkMetadata(BaseModel):
